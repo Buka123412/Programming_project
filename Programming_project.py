@@ -19,21 +19,33 @@ player_width = 40
 player_height = 40
 player_x = screen_width // 2
 player_y = screen_height // 2
+player_speed = 0.5
 
 
 
 def main():
-
+    global player_x, player_y
     running = True
 
     while running:
 
+        #Stops the game and closes the window if we press the close button
         for event in pygame.event.get():
-            #Stops the game and closes the window if we press the close button
+            
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
         
+        
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player_x -= player_speed
+        if keys[pygame.K_RIGHT]:
+            player_x += player_speed
+        if keys[pygame.K_UP]:
+            player_y -= player_speed
+        if keys[pygame.K_DOWN]:
+            player_y += player_speed
         
         screen.fill((0, 0, 0))
         draw_player()
