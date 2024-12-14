@@ -7,6 +7,9 @@ import sys
 #Initializing pygame
 pygame.init()
 
+#Clock capping the frame rate
+clock = pygame.time.Clock()
+
 #Our main screen properties
 screen_width = 800
 screen_height = 800
@@ -14,12 +17,13 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Programming Project")  # This is the name of our window
 
 
+
 #player properties
 player_width = 40
 player_height = 40
-player_x = screen_width // 2
-player_y = screen_height // 2
-player_speed = 0.5
+player_x = screen_width // 2 - player_width // 2
+player_y = screen_height // 2 - player_height // 2
+player_speed = 5
 
 
 
@@ -37,21 +41,24 @@ def main():
                 sys.exit()
         
         
+        #Player's movement
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] and player_x > 0:
             player_x -= player_speed
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and player_x < screen_width - player_width:
             player_x += player_speed
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] and player_y > 0:
             player_y -= player_speed
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] and player_y < screen_height - player_height:
             player_y += player_speed
         
+        #Drawings on the screen
         screen.fill((0, 0, 0))
         draw_player()
         pygame.display.update()
+        clock.tick(60)
 
 def draw_player():
-    pygame.draw.rect(screen, (0, 0, 255), (player_x - player_width // 2, player_y - player_height // 2, player_width, player_height))
+    pygame.draw.rect(screen, (0, 0, 255), (player_x, player_y, player_width, player_height))
 
 main()
