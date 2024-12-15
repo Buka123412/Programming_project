@@ -148,6 +148,13 @@ def main(): #main loop/tick
                     enemy["y"] += enemy["speed"]
                 elif enemy["y"] > player["y"]:
                     enemy["y"] -= enemy["speed"]
+             
+            
+            for bullet in entity_bullets[:]: #Collision check with bullet
+                if enemy["x"] < bullet["x"] < enemy["x"] + enemy["size"] and enemy["y"] < bullet["y"] < enemy["y"] + enemy["size"]:
+                    entity_bullets.remove(bullet)
+                    entity_enemies.remove(enemy)
+
                     
         #Drawings on the screen
         screen.fill(black)
