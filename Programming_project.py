@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import math
 
 pygame.init() #Initializing pygame
 
@@ -62,36 +63,28 @@ def main(): #main loop/tick
                 pygame.quit()
                 sys.exit()
             
+            if event.type == pygame.KEYDOWN: #function responsible for shooting bullets
+                
+                if event.key == pygame.K_SPACE:
+                    #gets the selected nearest enemy and calculates the distance when a bullet is fired
+                    nearest_enemy = get_nearest_enemy()
+                    if nearest_enemy:
+                        #Calculate the direction vector
+                        dx = nearest_enemy["x"] + nearest_enemy["size"] // 2 - (player["x"] + player["size"] // 2)
+                        dy = nearest_enemy["y"] + nearest_enemy["size"] // 2 - (player["y"] + player["size"] // 2)
+                        distance = math.sqrt(dx ** 2 + dy ** 2)
+                        #Normalize the direction vector
+                        dx /= distance
+                        dy /= distance
+                        #Spawn a bullet
+                        bullet_x = player["x"] + player["size"] // 2 - bullets["size"] // 2
+                        bullet_y = player["y"] + player["size"] // 2 - bullets["size"] // 2
+                        entity_bullets.append({"x": bullet_x, "y": bullet_y, "dx": dx, "dy": dy})
 
-        
-        keys = pygame.key.get_pressed()  
-        if keys[pygame.K_SPACE] and can_shoot: #player's shooting
-            if facing == "north":
-                x = player["x"] + player["size"] // 2 - bullets["size"] // 2
-                y = player["y"] - bullets["size"]
-                direction = "north"
-                entity_bullets.append({"x": x, "y": y, "direction": direction})
-            elif facing == "south":
-                x = player["x"] + player["size"] // 2 - bullets["size"] // 2
-                y = player["y"] + player["size"] + bullets["size"]
-                direction = "south"
-                entity_bullets.append({"x": x, "y": y, "direction": direction})
-            elif facing == "west":
-                x = player["x"] - bullets["size"]
-                y = player["y"] + player["size"] // 2 - bullets["size"] // 2
-                direction = "west"
-                entity_bullets.append({"x": x, "y": y, "direction": direction})
-            elif facing == "east":
-                x = player["x"] + player["size"]
-                y = player["y"] + player["size"] // 2 - bullets["size"] // 2
-                direction = "east"
-                entity_bullets.append({"x": x, "y": y, "direction": direction})
-            can_shoot = False
-            last_shot_time = current_time
+            
 
-        if not can_shoot and current_time - last_shot_time >= shoot_cooldown_time:
-            can_shoot = True
-
+    
+        keys = pygame.key.get_pressed() 
         if keys[pygame.K_LEFT] and player["x"] > 0: #player's movement
             player["x"] -= player["speed"]
             facing = "west"
@@ -106,17 +99,12 @@ def main(): #main loop/tick
             facing = "south"
 
         
-        for bullet in entity_bullets[:]:   #Update bullets
-            if bullet["direction"] == "north":
-                bullet["y"] -= bullets["speed"]
-            elif bullet["direction"] == "south":
-                bullet["y"] += bullets["speed"]
-            elif bullet["direction"] == "west":
-                bullet["x"] -= bullets["speed"]
-            elif bullet["direction"] == "east":
-                bullet["x"] += bullets["speed"]
+         #Loop that updates bullets place
+        for bullet in entity_bullets[:]:
+            bullet["x"] += bullet["dx"] * bullets["speed"]
+            bullet["y"] += bullet["dy"] * bullets["speed"]
 
-            # Remove bullets that go off-screen
+            #Removes bullets that miss and deletes them
             if bullet["x"] < 0 or bullet["x"] > screen_width or bullet["y"] < 0 or bullet["y"] > screen_height:
                 entity_bullets.remove(bullet)
             
@@ -164,7 +152,7 @@ def main(): #main loop/tick
         pygame.display.update()
         clock.tick(60)
 
-def draw_player():
+def draw_player(): #
     pygame.draw.rect(screen, blue, (player["x"], player["y"], player["size"], player["size"]))
 
 def draw_bullets():
@@ -174,5 +162,18 @@ def draw_bullets():
 def draw_enemies():
     for enemy in entity_enemies:
         pygame.draw.rect(screen, yellow, (enemy["x"], enemy["y"], enemy["size"], enemy["size"]))
+
+def get_nearest_enemy():
+    if not entity_enemies: 
+        return None #this eliminates the error that occurs if there are no enemies
+
+    nearest_enemy = None #Variable that collects the closest enemy to the player
+    min_distance = float('inf') #Variable that starts with a value of infinity and ensures that no enemy is out of this range. This values can be changed if we want a max range
+    for enemy in entity_enemies: # loop that runs through every enemy and calculates the distance to it
+        distance = math.sqrt((enemy["x"] - player["x"]) ** 2 + (enemy["y"] - player["y"]) ** 2) #this is the formula used to calculate the disntance between points in coordinate system
+        if distance < min_distance:
+            min_distance = distance
+            nearest_enemy = enemy
+    return nearest_enemy
 
 main()
