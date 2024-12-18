@@ -4,7 +4,6 @@ pygame.init() #Initializing pygame
 
 clock = pygame.time.Clock() #Clock capping the frame rate
 
-
 screen_width = 800 #main screen properties
 screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -21,17 +20,19 @@ gray = (128, 128, 128)
 player = { #player properties
     "size": 40,
     "speed": 5,
-    "health": 100
+    "health": 100,
+    "damage": 1
 }
 player["x"] = screen_width // 2 - player["size"] // 2 #starting position of the player
 player["y"] = screen_height // 2 - player["size"] // 2
 
 bullets = { #bullet properties
     "size": 10,
-    "speed": 7
+    "speed": 7,
 }
 entity_bullets = [] #a list storing every bullet and their properties as dictionaries
 
+#Enemy properties
 tank_properties = {
     "size": 60,
     "speed": 0.5,
@@ -59,12 +60,10 @@ entity_enemies = []
 spawn_timer = 0 #cooldown for enemies
 spawn_interval = 60 #frames between every spawn
 
-
 def main(): #main loop/tick
     global spawn_timer
 
     while True:
-        current_time = pygame.time.get_ticks() / 1000  # Get current time in seconds
 
         for event in pygame.event.get(): #Stops the game and closes the window if we press the close button
             if event.type == pygame.QUIT:
@@ -89,7 +88,7 @@ def main(): #main loop/tick
                                 # Spawn a bullet
                                 bullet_x = player["x"] + player["size"] // 2 - bullets["size"] // 2
                                 bullet_y = player["y"] + player["size"] // 2 - bullets["size"] // 2
-                                entity_bullets.append({"x": bullet_x, "y": bullet_y, "dx": dx, "dy": dy})
+                                entity_bullets.append({"x": bullet_x, "y": bullet_y, "dx": dx, "dy": dy, "type": "player"})
 
         keys = pygame.key.get_pressed() 
         if keys[pygame.K_LEFT] and player["x"] > 0: #player's movement
@@ -115,34 +114,24 @@ def main(): #main loop/tick
             spawn_timer = 0
             enemy_type = random.choice(["gladiator", "sniper", "tank"])
             if enemy_type == "gladiator":
-                size = gladiator_properties["size"]
-                speed = gladiator_properties["speed"]
-                health = gladiator_properties["health"]
-                damage = gladiator_properties["damage"]
+                properties = gladiator_properties
             elif enemy_type == "sniper":
-                size = sniper_properties["size"]
-                speed = sniper_properties["speed"]
-                health = sniper_properties["health"]
-                damage = sniper_properties["damage"]
-                sniper_bullet_speed = sniper_properties["bullet_speed"]
+                properties = sniper_properties
             elif enemy_type == "tank":
-                size = tank_properties["size"]
-                speed = tank_properties["speed"]
-                health = tank_properties["health"]
-                damage = tank_properties["damage"]
+                properties = tank_properties
 
             corner = random.choice(["top_left", "top_right", "bottom_left", "bottom_right"])
             if corner == "top_left":
                 enemy_x, enemy_y = 0, 0
             elif corner == "top_right":
-                enemy_x, enemy_y = screen_width - size, 0
+                enemy_x, enemy_y = screen_width - properties["size"], 0
             elif corner == "bottom_left":
-                enemy_x, enemy_y = 0, screen_height - size
+                enemy_x, enemy_y = 0, screen_height - properties["size"]
             elif corner == "bottom_right":
-                enemy_x, enemy_y = screen_width - size, screen_height - size
+                enemy_x, enemy_y = screen_width - properties["size"], screen_height - properties["size"]
 
-            entity_enemies.append({"x": enemy_x, "y": enemy_y, "size": size, "speed": speed, "health": health, "damage": damage, "type": enemy_type})
-
+            entity_enemies.append({"x": enemy_x, "y": enemy_y, "size": properties["size"], "speed": properties["speed"], "health": properties["health"], "damage": properties["damage"], "type": enemy_type})
+       
         for enemy in entity_enemies[:]:   #Move enemies toward the player
             if abs(enemy["x"] - player["x"]) > abs(enemy["y"] - player["y"]):
                 #horizontal movement
@@ -159,12 +148,14 @@ def main(): #main loop/tick
 
             for bullet in entity_bullets[:]: #Collision check with bullet
                 if enemy["x"] < bullet["x"] < enemy["x"] + enemy["size"] and enemy["y"] < bullet["y"] < enemy["y"] + enemy["size"]:
-                    if bullet in entity_bullets:
+                    if bullet["type"] == "player":
+                        enemy["health"] -= player["damage"]
                         entity_bullets.remove(bullet)
-                    if enemy in entity_enemies:
+                    if enemy["health"] <= 0:
                         entity_enemies.remove(enemy)
-        #Collision check with player
-            if (
+                    break
+
+            if ( #collision check with player and enemy
                 enemy["x"] < player["x"] + player["size"]
                 and enemy["x"] + enemy["size"] > player["x"]
                 and enemy["y"] < player["y"] + player["size"]
@@ -215,7 +206,7 @@ def get_nearest_enemy():
             nearest_enemy = enemy
     return nearest_enemy
 
-def draw_health_bar():
+def draw_health_bar():                                                                                                                                                                                                                                                                                                                                                                                                                                          #Signed by Petko Dimitrov
     health_bar_width = 200
     health_bar_height = 20
     health_bar_x = screen_width // 2 - health_bar_width // 2 #aligns player's healthbar's center with the x axis center
@@ -226,4 +217,4 @@ def draw_health_bar():
     health_width = int((player["health"] / 100) * health_bar_width)
     pygame.draw.rect(screen, red, (health_bar_x, health_bar_y, health_width, health_bar_height))
 
-main()
+main()                                                                                                                                                                                                                                                                                                                                                                                                                                                            #Signed by Petko Dimitrov            
