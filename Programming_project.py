@@ -206,7 +206,7 @@ def get_nearest_enemy():
             nearest_enemy = enemy
     return nearest_enemy
 
-def draw_health_bar():                                                                                                                                                                                                                                                                                                                                                                                                                                          #Signed by Petko Dimitrov 626
+def draw_health_bar():                                                                                                                                                                                                                                                                                                                                                                                                                                          #Signed by Petko Dimitrov 2041
     health_bar_width = 200
     health_bar_height = 20
     health_bar_x = screen_width // 2 - health_bar_width // 2 #aligns player's healthbar's center with the x axis center
@@ -217,4 +217,4 @@ def draw_health_bar():                                                          
     health_width = int((player["health"] / 100) * health_bar_width)
     pygame.draw.rect(screen, red, (health_bar_x, health_bar_y, health_width, health_bar_height))
 
-main()                                                                                                                                                                                                                                                                                                                                                                                                                                                            #Signed by Petko Dimitrov  626         
+main()                                                                                                                                                                                                                                                                                                                                                                                                                                                            #Signed by Petko Dimitrov  2041         
