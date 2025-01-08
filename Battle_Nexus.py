@@ -6,7 +6,7 @@ pygame.init() # initialize pygame
 clock = pygame.time.Clock() # clock capping frame rate
 tick_speed = 60 
 
-map_image = pygame.image.load('Programming_project/graphics/map/map.png')
+map_image = pygame.image.load('graphics/map/map.png')
 map_width = map_image.get_width()
 map_height = map_image.get_height()
 
@@ -21,7 +21,7 @@ main_menu = { #main menu properties
     'width': 800,
     'height': 600,
     'caption': 'Main Menu',
-    'map': 'Programming_project/graphics/main_menu/main_menu.png'
+    'map': 'graphics/main_menu/main_menu.png'
 }
 
 
@@ -93,19 +93,19 @@ sniper_bullets = { #sniper bullet's properties
 
 
 tank_image = [ # tank animations scaling to the correct size
-    pygame.transform.scale(pygame.image.load('Programming_project/graphics/tank/tank_0.png'), (int(enemy_tank['size']), int(enemy_tank['size']))),
-    pygame.transform.scale(pygame.image.load('Programming_project/graphics/tank/tank_1.png'), (int(enemy_tank['size']), int(enemy_tank['size'])))
+    pygame.transform.scale(pygame.image.load('graphics/tank/tank_0.png'), (int(enemy_tank['size']), int(enemy_tank['size']))),
+    pygame.transform.scale(pygame.image.load('graphics/tank/tank_1.png'), (int(enemy_tank['size']), int(enemy_tank['size'])))
 ]
 
 
 
 gladiator_image = [# gladiator animations scaling to the correct size
-    pygame.transform.scale(pygame.image.load('Programming_project/graphics/gladiator/gladiator_0.png'), (int(enemy_gladiator['size']), int(enemy_gladiator['size']))),
-    pygame.transform.scale(pygame.image.load('Programming_project/graphics/gladiator/gladiator_1.png'), (int(enemy_gladiator['size']), int(enemy_gladiator['size'])))
+    pygame.transform.scale(pygame.image.load('graphics/gladiator/gladiator_0.png'), (int(enemy_gladiator['size']), int(enemy_gladiator['size']))),
+    pygame.transform.scale(pygame.image.load('graphics/gladiator/gladiator_1.png'), (int(enemy_gladiator['size']), int(enemy_gladiator['size'])))
 ]
 
  # sniper animations scaling to the correct size
-sniper_image = pygame.transform.scale(pygame.image.load('Programming_project/graphics/sniper/sniper.png'), (int(enemy_sniper['size']), int(enemy_sniper['size'])))
+sniper_image = pygame.transform.scale(pygame.image.load('graphics/sniper/sniper.png'), (int(enemy_sniper['size']), int(enemy_sniper['size'])))
 
 default_health = player['health'] # this variable keeps the original value for the player's health
 current_state = 'main menu' # starting state
@@ -583,7 +583,7 @@ def main():
 
             
 def draw_player():
-    player_image = pygame.image.load('Programming_project/graphics/player/player.png')
+    player_image = pygame.image.load('graphics/player/player.png')
     player_image = pygame.transform.scale(player_image, (player['size'], player['size']))     # scale the player image to match player size
 
     # rotate the image based on the direction
@@ -652,7 +652,7 @@ def get_nearest_enemy():
 
 def draw_bullets():
 
-    original_bullet_image = pygame.image.load('Programming_project/graphics/bullets/bullet.png')
+    original_bullet_image = pygame.image.load('graphics/bullets/bullet.png')
 
     for bullet in entity_bullet:
 
