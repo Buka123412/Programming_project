@@ -1,0 +1,8 @@
+# this ignores everything
+*
+
+# ignore everything exept main file for the game
+!Battle_Nexus.py
+
+# exept main folder for animations and map
+!graphics/
