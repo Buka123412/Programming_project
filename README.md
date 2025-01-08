@@ -22,9 +22,9 @@ Then find your file and on your computer and unzip it.
 After this you are ready to run it.
 
 How to run:
-Open the folder "Programming_project". Locate its path. For example "/Users/your_name/Studiovisualcode".
-Open a terminal and type cd /Users/your_name/Studiovisualcode.
-Then type python programming_project/Battle_Nexus.py or python3 programming_project/Battle_Nexus.py.
+Open the folder "Programming_project-master". Locate the path for The file Battle_Nexus.py. For example "/Users/your_name/Studiovisualcode/Programming_project-master".
+Open a terminal and type cd /Users/your_name/Studiovisualcode/Programming_project-master.
+Then type python Battle_Nexus.py or python3 Battle_Nexus.py
 
 
 
